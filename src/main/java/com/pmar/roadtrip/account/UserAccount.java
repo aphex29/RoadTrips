@@ -22,9 +22,29 @@ public class UserAccount {
     )
     private Long id;
 
-
+    @Column(
+            name = "username",
+            nullable = false
+    )
     private String username;
+
+    @Column(
+            name = "password",
+            nullable = false
+    )
+    private String password;
+
+    @Column(
+            name = "email",
+            nullable = false
+    )
     private String email;
 
-    private String password;
+    public UserAccount(){}
+
+    public UserAccount(String username, String password, String email){
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
 }

@@ -26,10 +26,8 @@ public class RouteService {
 								"destination":
 								{
 									"address": "%s"				
-								},
-								
+								},								
 								"travelMode":"DRIVE",
-					
 							}
 							""",origin,destination);
 

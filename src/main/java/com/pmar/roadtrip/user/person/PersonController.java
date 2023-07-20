@@ -26,15 +26,21 @@ public class PersonController {
         return new ResponseEntity<Person>(service.addNewRoute(id,origin,destination),HttpStatus.OK);
     }
 
+    @PostMapping("api/v1/get/person")
+    public ResponseEntity<Person> getPerson(@RequestBody Map<String,String> json){
+        Long accountId = Long.parseLong(json.get("accountId"));
+        return new ResponseEntity<Person>(service.getPerson(accountId),HttpStatus.OK);
+    }
+
     @PostMapping("api/v1/create/person")
     public ResponseEntity<Person> createPerson(@RequestBody Map<String,String> json){
-
+        Long accountId = Long.parseLong(json.get("accountId"));
         String firstName = json.get("firstName");
         String lastName = json.get("lastName");
         String username = json.get("username");
         String email = json.get("email");
 
-        return new ResponseEntity<Person>(service.createPerson(firstName, lastName, username, email), HttpStatus.OK);
+        return new ResponseEntity<Person>(service.createPerson(accountId,firstName, lastName, username, email), HttpStatus.OK);
     }
 
 

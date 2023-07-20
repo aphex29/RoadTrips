@@ -18,12 +18,10 @@ public class RouteController {
         this.service = service;
     }
 
-    @PostMapping("/api/route")
+    @PostMapping("/api/v1/get/route")
     public void getRouteInfo(@RequestParam(value="origin") String origin,
                              @RequestParam(value="destination") String destination){
 		service.getRouteInfo(origin,destination);
     }
-
-
 
 }

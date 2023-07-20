@@ -3,6 +3,7 @@ package com.pmar.roadtrip.user.person;
 import com.pmar.roadtrip.route.Route;
 import com.pmar.roadtrip.user.User;
 import jakarta.persistence.*;
+import org.hibernate.annotations.DialectOverride;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -29,6 +30,12 @@ public class Person implements User {
     )
     private Long id;
 
+    @Column(
+            name = "account_id",
+            nullable = false,
+            updatable = false
+    )
+    private Long accountId;
 
     @Column(
             name = "first_name",
@@ -61,7 +68,8 @@ public class Person implements User {
     private ArrayList<Route> savedRoutes;
 
     public Person(){}
-    public Person(String firstName, String lastName, String username,String email){
+    public Person(Long accountId, String firstName, String lastName, String username,String email){
+        this.accountId = accountId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -93,4 +101,9 @@ public class Person implements User {
     public void setLastName(String newLastName) {lastName = newLastName;}
 
     public void setNewRoute(Route newRoute) {savedRoutes.add(newRoute);}
+
+    @Override
+    public String toString(){
+        return String.format("Person[Name: %s %s, Username: %s, Email: %s]",firstName,lastName,username,email);
+    }
 }

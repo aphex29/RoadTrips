@@ -37,17 +37,29 @@ public class RoadTripsApplication {
 
 	}
 
-//	@Bean
-//	CommandLineRunner commandLineRunner(PersonRepository personRepo){
-//		return args -> {
-//			Person person = new Person(1L,"Patrick","aphex","markowski@gmail.com");
-//			personRepo.save(person);
-//
-//
-//
-//
-//		};
-//	}
+	@Bean
+	CommandLineRunner commandLineRunner(PersonRepository personRepo, PersonService personService){
+		return args -> {
+
+			personRepo.deleteAll();
+
+			Person person1 = new Person(1L,"Patrick","mark","aphex","markowski@gmail.com");
+			personRepo.save(person1);
+
+			Person person2 = new Person(2L,"Markwee","TEST2","prof","mail@gmail.com");
+			personRepo.save(person2);
+
+
+
+			System.out.println("*********Test1***********");
+			System.out.println(personService.getPerson(1L));
+			System.out.println(personService.getPerson(2L));
+			System.out.println("*********End Test2***********");
+
+
+
+		};
+	}
 
 
 }

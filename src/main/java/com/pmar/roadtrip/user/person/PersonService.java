@@ -22,8 +22,13 @@ public class PersonService {
         return repository.save(person);
     }
 
-    public Person createPerson(String firstName, String lastName, String username, String email){
-        Person person = new Person(firstName, lastName,username,email);
+    public Person getPerson(Long accountId){
+        return repository.findByAccountId(accountId)
+                .orElseThrow(()-> new EntityNotFoundException("Account ID: "+ accountId + " not found"));
+    }
+
+    public Person createPerson(Long accountId,String firstName, String lastName, String username, String email){
+        Person person = new Person(accountId, firstName, lastName,username,email);
         return repository.save(person);
     }
 }

@@ -1,4 +1,6 @@
 package com.pmar.roadtrip.route;
 
-public interface RouteRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RouteRepository extends JpaRepository<Route,Long> {
 }
