@@ -13,12 +13,8 @@ public class PersonService {
     @Autowired
     private PersonRepository repository;
 
-
-    public Person addNewRoute(Long id,String origin, String destination){
-        RouteService routeService = new RouteService();
-        Route newRoute = routeService.getRouteInfo(origin, destination);
-        Person person = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
-        person.getRoutes().add(newRoute);
+    public Person createPerson(Long accountId,String firstName, String lastName, String username, String email){
+        Person person = new Person(accountId, firstName, lastName,username,email);
         return repository.save(person);
     }
 
@@ -27,8 +23,5 @@ public class PersonService {
                 .orElseThrow(()-> new EntityNotFoundException("Account ID: "+ accountId + " not found"));
     }
 
-    public Person createPerson(Long accountId,String firstName, String lastName, String username, String email){
-        Person person = new Person(accountId, firstName, lastName,username,email);
-        return repository.save(person);
-    }
+
 }

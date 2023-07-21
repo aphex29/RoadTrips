@@ -17,22 +17,14 @@ public class PersonController {
     }
 
 
-    @PostMapping("/api/v1/add/route")
-    public ResponseEntity<Person> addNewRoute(@RequestBody Map<String,String> json){
-        Long id = Long.parseLong(json.get("id"));
-        String origin = json.get("origin");
-        String destination = json.get("destination");
 
-        return new ResponseEntity<Person>(service.addNewRoute(id,origin,destination),HttpStatus.OK);
-    }
-
-    @PostMapping("api/v1/get/person")
+    @PostMapping("/api/v1/get/person")
     public ResponseEntity<Person> getPerson(@RequestBody Map<String,String> json){
         Long accountId = Long.parseLong(json.get("accountId"));
         return new ResponseEntity<Person>(service.getPerson(accountId),HttpStatus.OK);
     }
 
-    @PostMapping("api/v1/create/person")
+    @PostMapping("/api/v1/create/person")
     public ResponseEntity<Person> createPerson(@RequestBody Map<String,String> json){
         Long accountId = Long.parseLong(json.get("accountId"));
         String firstName = json.get("firstName");
