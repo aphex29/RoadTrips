@@ -3,7 +3,6 @@ package com.pmar.roadtrip.user.person;
 import com.pmar.roadtrip.route.Route;
 import com.pmar.roadtrip.user.User;
 import jakarta.persistence.*;
-import org.hibernate.annotations.DialectOverride;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -18,6 +17,7 @@ public class Person implements User {
     @SequenceGenerator(
             name = "person_sequence",
             sequenceName = "person_sequence",
+            initialValue=200,
             allocationSize = 1
     )
     @GeneratedValue(
@@ -62,11 +62,6 @@ public class Person implements User {
     private String email;
 
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition="JSON",
-            name="savedRoutes")
-    private ArrayList<Route> savedRoutes;
-
     public Person(){}
     public Person(Long accountId, String firstName, String lastName, String username,String email){
         this.accountId = accountId;
@@ -74,11 +69,7 @@ public class Person implements User {
         this.lastName = lastName;
         this.username = username;
         this.email = email;
-        this.savedRoutes = new ArrayList<Route>();
-
     }
-
-
 
 
 
@@ -90,9 +81,7 @@ public class Person implements User {
 
     public String getEmail() {return email;}
 
-
-
-    public ArrayList<Route> getRoutes() {return savedRoutes;}
+    public Long getAccountId(){return accountId;}
 
     public void setUsername(String newUsername) {username = newUsername;}
 
@@ -100,7 +89,6 @@ public class Person implements User {
 
     public void setLastName(String newLastName) {lastName = newLastName;}
 
-    public void setNewRoute(Route newRoute) {savedRoutes.add(newRoute);}
 
     @Override
     public String toString(){
