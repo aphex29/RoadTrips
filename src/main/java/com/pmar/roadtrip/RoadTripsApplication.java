@@ -50,11 +50,10 @@ public class RoadTripsApplication {
 			personRepo.save(person2);
 
 
-
 			System.out.println("*********Test1***********");
 			System.out.println(personService.getPerson(1L));
 			System.out.println(personService.getPerson(2L));
-			System.out.println("*********End Test2***********");
+			System.out.println("*******End Test2*********");
 
 
 

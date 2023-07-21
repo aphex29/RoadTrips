@@ -1,10 +1,14 @@
 package com.pmar.roadtrip.route;
 
+import jakarta.persistence.EntityNotFoundException;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class RouteService {
@@ -12,10 +16,11 @@ public class RouteService {
     @Value("${env.API_KEY}")
     private String apiKey;
 
+	@Autowired
+	private RouteRepository repository;
 
 
-
-    public Route getRouteInfo(String origin, String destination){
+    public Route calculateRoute(Long userId,String origin, String destination){
         //Creating JSON payload to send to Googles API Server
         String bodyJson = 	String.format("""
 							{
@@ -52,9 +57,22 @@ public class RouteService {
 		int hours = time/60;
 		int seconds = time%60;
 
-		return new Route(origin,destination,distance,hours,seconds);
+		Route route = new Route(userId,origin,destination,distance,hours,seconds);
 
+		return repository.save(route);
     }
+
+	public Route getRoute(Long routeId){
+		return repository.findById(routeId)
+				.orElseThrow(() -> new EntityNotFoundException("RouteID: " + routeId + " not found"));
+	}
+
+	public List<Route> getRoutes(Long userId){
+		return repository.findAllByUserId(userId)
+				.orElseThrow(() -> new EntityNotFoundException("userId: " + userId + " not found"));
+	}
+
+
 
 
 

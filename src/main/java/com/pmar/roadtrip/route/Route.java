@@ -25,6 +25,11 @@ public class Route {
     )
     private Long id;
 
+
+    @Column(name="user_id",
+            updatable = false)
+    private Long userId;
+
     @Column(name="origin",
             nullable = false)
     private String origin;
@@ -42,7 +47,8 @@ public class Route {
     public Route(){
 
     }
-    public Route(String origin, String destination, double distance, int hours, int minutes){
+    public Route(Long userId, String origin, String destination, double distance, int hours, int minutes){
+        this.userId= userId;
         this.origin = origin;
         this.destination = destination;
         this.distance = distance;
