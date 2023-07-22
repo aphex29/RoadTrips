@@ -56,6 +56,19 @@ public class Route {
         this.minutes = minutes;
     }
 
+    public String getOrigin(){return origin;}
+    public String getDestination(){return destination;}
+    public double getDistance(){return distance;}
+    public int getHours(){return hours;}
+    public int getMinutes(){return minutes;}
+
+    public void setOrigin(String newOrigin){origin = newOrigin;}
+    public void setDestination(String newDestination){destination=newDestination;}
+    public void setDistance(double newDistance){distance=newDistance;}
+    public void setHours(int newHours){hours=newHours;}
+    public void setMinutes(int newMinutes){minutes=newMinutes;}
+
+
     public String toString(){
         return String.format("Route[Origin: %s, Destination: %s, Distance: %fmi, Total Time: %dh%dm]",origin,destination,distance,hours,minutes);
     }

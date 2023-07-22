@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RouteService {
@@ -20,7 +22,7 @@ public class RouteService {
 	private RouteRepository repository;
 
 
-    public Route calculateRoute(Long userId,String origin, String destination){
+    public Map<String,String> createRouteInfo(Long userId,String origin, String destination){
         //Creating JSON payload to send to Googles API Server
         String bodyJson = 	String.format("""
 							{
@@ -55,12 +57,19 @@ public class RouteService {
 
 		int time = Integer.parseInt(secondsStr.substring(0,secondsStr.length()));
 		int hours = time/60;
-		int seconds = time%60;
+		int minutes = time%60;
 
-		Route route = new Route(userId,origin,destination,distance,hours,seconds);
+		Map<String,String> routeVal = new HashMap<String,String>();
+		routeVal.put("userId",Long.toString(userId));
+		routeVal.put("origin",origin);
+		routeVal.put("destination",destination);
+		routeVal.put("distance",Double.toString(distance));
+		routeVal.put("hours",Integer.toString(hours));
+		routeVal.put("minutes",Integer.toString(minutes));
 
-		return repository.save(route);
+		return routeVal;
     }
+
 
 	public Route getRoute(Long routeId){
 		return repository.findById(routeId)
@@ -71,6 +80,40 @@ public class RouteService {
 		return repository.findAllByUserId(userId)
 				.orElseThrow(() -> new EntityNotFoundException("userId: " + userId + " not found"));
 	}
+
+	public Route editRoute(Long userId, Long routeId,String origin, String destination){
+		Route oldRoute = getRoute(routeId);
+		Map<String,String> routeVal = createRouteInfo(userId,origin,destination);
+
+		String newOrigin = routeVal.get("origin");
+		String newDestination = routeVal.get("destination");
+		double distance = Double.parseDouble(routeVal.get("distance"));
+		int hours = Integer.parseInt(routeVal.get("hours"));
+		int minutes = Integer.parseInt(routeVal.get("hours"));
+
+		oldRoute.setOrigin(newOrigin);
+		oldRoute.setDestination(newDestination);
+		oldRoute.setDistance(distance);
+		oldRoute.setHours(hours);
+		oldRoute.setMinutes(minutes);
+
+		return repository.save(oldRoute);
+	}
+
+	public Route setRoute(Long userId,String origin, String destination){
+		Map<String,String> routeVal = createRouteInfo(userId,origin,destination);
+
+		double distance = Double.parseDouble(routeVal.get("distance"));
+		int hours = Integer.parseInt(routeVal.get("hours"));
+		int minutes = Integer.parseInt(routeVal.get("minutes"));
+
+		Route route = new Route(userId,origin,destination,distance,hours,minutes);
+		return repository.save(route);
+	}
+
+
+
+
 
 
 
