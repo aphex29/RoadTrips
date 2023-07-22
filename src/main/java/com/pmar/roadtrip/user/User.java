@@ -8,11 +8,14 @@ public interface User {
 
     String getFirstName();
     String getLastName();
+    String getUsername();
+    String getEmail();
+    Long getAccountId();
 
     void setFirstName(String newName);
-
     void setLastName(String newLastName);
+    void setUsername(String newUsername);
 
-    Long getAccountId();
+
 
 }
