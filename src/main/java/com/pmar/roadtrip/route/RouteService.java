@@ -1,5 +1,10 @@
 package com.pmar.roadtrip.route;
 
+import com.google.maps.GeoApiContext;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.Duration;
+import com.google.maps.model.LatLng;
+import com.pmar.roadtrip.request.DirectionsRequest;
 import jakarta.persistence.EntityNotFoundException;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -22,53 +27,40 @@ public class RouteService {
 	private RouteRepository repository;
 
 
-    public Map<String,String> createRouteInfo(Long userId,String origin, String destination){
-        //Creating JSON payload to send to Googles API Server
-        String bodyJson = 	String.format("""
-							{
-								"origin":	
-									{
-										"address": "%s"	         
-									},							
-								"destination":
-								{
-									"address": "%s"				
-								},								
-								"travelMode":"DRIVE",
-							}
-							""",origin,destination);
+    public Map<String,String> requestRoute(Long userId,String origin, String destination) {
+		GeoApiContext context = new GeoApiContext.Builder().apiKey(apiKey).build();
 
-        //Sending post request
-        HttpResponse<String> response = Unirest.post("https://routes.googleapis.com/directions/v2:computeRoutes")
-                .header("Content-Type", "application/json")
-                .header("X-Goog-Api-Key", apiKey)
-                .header("X-Goog-FieldMask","routes.distanceMeters,routes.duration,routes.polyline.encodedPolyline")
-                .body(bodyJson)
-                .asString();
+		DirectionsRequest dRequest = new DirectionsRequest(context,origin,destination);
+		DirectionsResult result = dRequest.execute();
 
-		JSONObject jobject = new JSONObject(response);
-		int jsonDistance = jobject.getJSONArray("routes").getJSONObject(0).getInt("distanceMeters");
-		String secondsStr = jobject.getJSONArray("routes").getJSONObject(0).getString("duration");
+		context.shutdown();
 
-		//Truncating excess decimals
-		double distance = (jsonDistance*0.00062137)*100;
-		distance = (double) ((int) distance);
-		distance=distance/100;
+		LatLng startLatLng = new LatLng(result.routes[0].legs[0].startLocation.lat,
+									result.routes[0].legs[0].startLocation.lng);
 
-		int time = Integer.parseInt(secondsStr.substring(0,secondsStr.length()));
-		int hours = time/60;
-		int minutes = time%60;
+		LatLng endLatLng = new LatLng(result.routes[0].legs[0].endLocation.lat,
+									result.routes[0].legs[0].endLocation.lng);
 
-		Map<String,String> routeVal = new HashMap<String,String>();
-		routeVal.put("userId",Long.toString(userId));
-		routeVal.put("origin",origin);
-		routeVal.put("destination",destination);
-		routeVal.put("distance",Double.toString(distance));
-		routeVal.put("hours",Integer.toString(hours));
-		routeVal.put("minutes",Integer.toString(minutes));
 
-		return routeVal;
-    }
+		double startLat = startLatLng.lat;
+		double startLng = startLatLng.lng;
+		double endLat = endLatLng.lat;
+		double endLng = endLatLng.lng;
+
+		Long duration = result.routes[0].legs[0].duration.inSeconds;
+		Long distance = result.routes[0].legs[0].distance.inMeters;
+
+		Map<String, String> routeInfo = new HashMap<>();
+
+		routeInfo.put("startLat",Double.toString(startLat));
+		routeInfo.put("startLng",Double.toString(startLng));
+		routeInfo.put("endLat",Double.toString(endLat));
+		routeInfo.put("endLng",Double.toString(endLng));
+		routeInfo.put("duration",Long.toString(duration));
+		routeInfo.put("distance",Long.toString(distance));
+
+		return routeInfo;
+	}
 
 
 	public Route getRoute(Long routeId){
@@ -83,31 +75,35 @@ public class RouteService {
 
 	public Route editRoute(Long userId, Long routeId,String origin, String destination){
 		Route oldRoute = getRoute(routeId);
-		Map<String,String> routeVal = createRouteInfo(userId,origin,destination);
+		Map<String,String> routeVal = requestRoute(userId,origin,destination);
 
 		String newOrigin = routeVal.get("origin");
 		String newDestination = routeVal.get("destination");
-		double distance = Double.parseDouble(routeVal.get("distance"));
-		int hours = Integer.parseInt(routeVal.get("hours"));
-		int minutes = Integer.parseInt(routeVal.get("hours"));
+		Long distance = Long.parseLong(routeVal.get("distance"));
+		Long duration = Long.parseLong(routeVal.get("duration"));
 
 		oldRoute.setOrigin(newOrigin);
 		oldRoute.setDestination(newDestination);
 		oldRoute.setDistance(distance);
-		oldRoute.setHours(hours);
-		oldRoute.setMinutes(minutes);
+		oldRoute.setDuration(duration);
+
 
 		return repository.save(oldRoute);
 	}
 
 	public Route setRoute(Long userId,String origin, String destination){
-		Map<String,String> routeVal = createRouteInfo(userId,origin,destination);
+		Map<String,String> routeInfo = requestRoute(userId,origin,destination);
 
-		double distance = Double.parseDouble(routeVal.get("distance"));
-		int hours = Integer.parseInt(routeVal.get("hours"));
-		int minutes = Integer.parseInt(routeVal.get("minutes"));
 
-		Route route = new Route(userId,origin,destination,distance,hours,minutes);
+		Long duration = Long.parseLong(routeInfo.get("duration"));
+		Long distance= Long.parseLong(routeInfo.get("distance"));
+
+		double startLat = Double.parseDouble(routeInfo.get("startLat"));
+		double startLng = Double.parseDouble(routeInfo.get("startLng"));
+		double endLat = Double.parseDouble(routeInfo.get("endLat"));
+		double endLng = Double.parseDouble(routeInfo.get("endLng"));
+
+		Route route = new Route(userId,origin,destination,distance,duration,startLat,startLng,endLat,endLng);
 		return repository.save(route);
 	}
 

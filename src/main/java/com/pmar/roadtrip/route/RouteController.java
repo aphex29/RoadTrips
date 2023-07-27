@@ -1,5 +1,8 @@
 package com.pmar.roadtrip.route;
 
+import com.google.maps.GeoApiContext;
+import com.google.maps.model.DirectionsResult;
+import com.pmar.roadtrip.request.DirectionsRequest;
 import com.pmar.roadtrip.user.person.Person;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -20,15 +23,15 @@ public class RouteController {
     private RouteService service;
 
 
-    @PostMapping("/api/v1/calc/route")
-    public ResponseEntity<Map<String,String>> createRouteInfo(@RequestBody Map<String,String> json){
-        Long userId = Long.parseLong(json.get("userId"));
-        String origin = json.get("origin");
-        String destination = json.get("destination");
-        Map<String,String> routeVal = service.createRouteInfo(userId,origin,destination);
-
-        return new ResponseEntity<Map<String,String>>(routeVal, HttpStatus.OK);
-    }
+//    @PostMapping("/api/v1/calc/route")
+//    public ResponseEntity<Map<String,String>> createRouteInfo(@RequestBody Map<String,String> json){
+//        Long userId = Long.parseLong(json.get("userId"));
+//        String origin = json.get("origin");
+//        String destination = json.get("destination");
+//        Map<String,String> routeVal = service.createRouteInfo(userId,origin,destination);
+//
+//        return new ResponseEntity<Map<String,String>>(routeVal, HttpStatus.OK);
+//    }
 
     @PostMapping("/api/v1/get/route")
     public ResponseEntity<Route> getRoute(@RequestBody Map<String,String> json){
@@ -60,6 +63,17 @@ public class RouteController {
 
         return new ResponseEntity<Route>(service.setRoute(userId,origin,destination),HttpStatus.OK);
     }
+
+
+    @PostMapping("api/v1/request/route")
+    public ResponseEntity<Map<String,String>> requestRoute (@RequestBody Map<String,String> json){
+        Long userId = Long.parseLong(json.get("userId"));
+        String origin = json.get("origin");
+        String destination = json.get("destination");
+
+        return new ResponseEntity<Map<String,String>>(service.requestRoute(userId,origin,destination),HttpStatus.OK);
+    }
+
 
 
 

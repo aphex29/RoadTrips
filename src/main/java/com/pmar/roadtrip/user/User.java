@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public interface User {
 
 
+    Long getId();
     String getFirstName();
     String getLastName();
     String getUsername();

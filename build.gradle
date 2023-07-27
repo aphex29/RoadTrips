@@ -22,7 +22,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'com.konghq:unirest-java:3.14.5'
 	implementation 'me.paulschwarz:spring-dotenv:2.3.0'
-
+	implementation 'com.google.maps:google-maps-services:2.2.0'
+	implementation 'org.slf4j:slf4j-simple:1.7.25'
 }
 
 tasks.named('test') {

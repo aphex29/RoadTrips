@@ -80,6 +80,8 @@ public class Person implements User {
 
     public Long getAccountId(){return accountId;}
 
+    public Long getId(){return id;}
+
     public void setUsername(String newUsername) {username = newUsername;}
 
     public void setFirstName(String newFirstName) {firstName = newFirstName;}
@@ -89,6 +91,6 @@ public class Person implements User {
 
     @Override
     public String toString(){
-        return String.format("Person[Name: %s %s, Username: %s, Email: %s]",firstName,lastName,username,email);
+        return String.format("Person[ID: %d, Name: %s %s, Username: %s, Email: %s]",id,firstName,lastName,username,email);
     }
 }

@@ -2,6 +2,8 @@ package com.pmar.roadtrip;
 
 import com.google.gson.JsonObject;
 import com.pmar.roadtrip.route.Route;
+import com.pmar.roadtrip.route.RouteRepository;
+import com.pmar.roadtrip.route.RouteService;
 import com.pmar.roadtrip.user.person.Person;
 import com.pmar.roadtrip.user.person.PersonRepository;
 import com.pmar.roadtrip.user.person.PersonService;
@@ -38,10 +40,11 @@ public class RoadTripsApplication {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(PersonRepository personRepo, PersonService personService){
+	CommandLineRunner commandLineRunner(PersonRepository personRepo, PersonService personService, RouteService routeService, RouteRepository routeRepository){
 		return args -> {
 
 			personRepo.deleteAll();
+			routeRepository.deleteAll();
 
 			Person person1 = new Person(1L,"Patrick","mark","aphex","markowski@gmail.com");
 			personRepo.save(person1);
@@ -49,14 +52,16 @@ public class RoadTripsApplication {
 			Person person2 = new Person(2L,"Markwee","TEST2","prof","mail@gmail.com");
 			personRepo.save(person2);
 
-
-			System.out.println("*********Test1***********");
 			System.out.println(personService.getPerson(1L));
 			System.out.println(personService.getPerson(2L));
-			System.out.println("*******End Test2*********");
 
+			Long p1Id = person1.getId();
+			Route route1 = new Route(p1Id,"Chicago","Naperville",12.5,2000L,20.0,21,23,25);
+			Route route2 = new Route(p1Id,"Indianapolis","Springfield",12.5,56000L,22.0,25,23,27);
+			routeRepository.save(route1);
+			routeRepository.save(route2);
 
-
+			System.out.println(routeService.getRoutes(p1Id));
 		};
 	}
 
