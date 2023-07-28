@@ -5,6 +5,7 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.Duration;
 import com.google.maps.model.LatLng;
 import com.pmar.roadtrip.request.DirectionsRequest;
+import com.pmar.roadtrip.request.GeoContextBuilder;
 import jakarta.persistence.EntityNotFoundException;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -12,6 +13,8 @@ import kong.unirest.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import com.pmar.roadtrip.request.GeoContextBuilder;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,29 +31,32 @@ public class RouteService {
 
 
     public Map<String,String> requestRoute(Long userId,String origin, String destination) {
-		GeoApiContext context = new GeoApiContext.Builder().apiKey(apiKey).build();
+
+		GeoContextBuilder gCB = new GeoContextBuilder();
+		GeoApiContext context =gCB.getContext();
+
 
 		DirectionsRequest dRequest = new DirectionsRequest(context,origin,destination);
+		
 		DirectionsResult result = dRequest.execute();
-
 		context.shutdown();
 
-		LatLng startLatLng = new LatLng(result.routes[0].legs[0].startLocation.lat,
-									result.routes[0].legs[0].startLocation.lng);
+		LatLng start = result.routes[0].legs[0].startLocation;
+		LatLng end = result.routes[0].legs[0].endLocation;
 
-		LatLng endLatLng = new LatLng(result.routes[0].legs[0].endLocation.lat,
-									result.routes[0].legs[0].endLocation.lng);
-
-
-		double startLat = startLatLng.lat;
-		double startLng = startLatLng.lng;
-		double endLat = endLatLng.lat;
-		double endLng = endLatLng.lng;
+		double startLat = start.lat;
+		double startLng = start.lng;
+		double endLat = end.lat;
+		double endLng = end.lng;
 
 		Long duration = result.routes[0].legs[0].duration.inSeconds;
 		Long distance = result.routes[0].legs[0].distance.inMeters;
 
 		Map<String, String> routeInfo = new HashMap<>();
+
+
+		routeInfo.put("origin",result.routes[0].legs[0].startAddress);
+		routeInfo.put("destination",result.routes[0].legs[0].endAddress);
 
 		routeInfo.put("startLat",Double.toString(startLat));
 		routeInfo.put("startLng",Double.toString(startLng));
@@ -63,9 +69,9 @@ public class RouteService {
 	}
 
 
-	public Route getRoute(Long routeId){
-		return repository.findById(routeId)
-				.orElseThrow(() -> new EntityNotFoundException("RouteID: " + routeId + " not found"));
+	public Route getRoute(Long id){
+		return repository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("RouteID: " + id + " not found"));
 	}
 
 	public List<Route> getRoutes(Long userId){
