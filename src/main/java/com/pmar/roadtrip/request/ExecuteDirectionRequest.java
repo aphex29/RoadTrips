@@ -1,6 +1,6 @@
 package com.pmar.roadtrip.request;
 
-public interface GeoContext<T> {
+public interface ExecuteDirectionRequest<T> {
 
     T execute();
 
