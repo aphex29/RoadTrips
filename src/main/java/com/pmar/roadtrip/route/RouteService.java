@@ -37,7 +37,7 @@ public class RouteService {
 
 
 		DirectionsRequest dRequest = new DirectionsRequest(context,origin,destination);
-		
+
 		DirectionsResult result = dRequest.execute();
 		context.shutdown();
 

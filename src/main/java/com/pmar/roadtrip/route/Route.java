@@ -37,10 +37,6 @@ public class Route {
             nullable = false)
     private String destination;
 
-    @Column(name="distance",
-            nullable = false)
-    private double distance;
-
     @Column(name="startLat",
             nullable = false)
     private double startLat;
@@ -56,6 +52,10 @@ public class Route {
     @Column(name="endLng",
             nullable = false)
     private double endLng;
+
+    @Column(name="distance",
+            nullable = false)
+    private double distance;
 
     @Column(name="duration",
             nullable = false)
@@ -99,6 +99,9 @@ public class Route {
     public void setEndLng(double newEndLng){endLng=newEndLng;}
 
     public String toString(){
-        return String.format("Route[Route ID: %d, Origin: %s, Destination: %s, Distance: %.2fmi, Total Time: %ds]",id,origin,destination,distance,duration);
+        double miles = distance*0.000621371;
+        int hours = (int)(distance/60);
+        int minutes = (int)(duration%60);
+        return String.format("Route[Route ID: %d, Origin: %s, Destination: %s, Distance: %.2fmi, Total Time: %dh%dm]",id,origin,destination,miles,hours,minutes);
     }
 }
