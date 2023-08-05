@@ -1,39 +1,32 @@
 package com.pmar.roadtrip.user.person;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/v1/user")
 public class PersonController {
+
+    @Autowired
     PersonService service;
-    public PersonController(PersonService service){
-        this.service = service;
+
+
+    @GetMapping("/get/all")
+    public ResponseEntity<List<Person>> getAll(){
+        return new ResponseEntity<List<Person>>(service.getAll(), HttpStatus.OK);
     }
 
-
-
-    @PostMapping("/api/v1/get/person")
-    public ResponseEntity<Person> getPerson(@RequestBody Map<String,String> json){
-        Long accountId = Long.parseLong(json.get("accountId"));
-        return new ResponseEntity<Person>(service.getPerson(accountId),HttpStatus.OK);
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Person> getById(@PathVariable String id){
+        return new ResponseEntity<Person>(service.getById(id),HttpStatus.OK);
     }
 
-    @PostMapping("/api/v1/create/person")
-    public ResponseEntity<Person> createPerson(@RequestBody Map<String,String> json){
-        Long accountId = Long.parseLong(json.get("accountId"));
-        String firstName = json.get("firstName");
-        String lastName = json.get("lastName");
-        String username = json.get("username");
-        String email = json.get("email");
-
-        return new ResponseEntity<Person>(service.createPerson(accountId,firstName, lastName, username, email), HttpStatus.OK);
-    }
 
 
 }

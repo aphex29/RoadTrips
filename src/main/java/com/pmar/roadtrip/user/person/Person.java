@@ -2,95 +2,84 @@ package com.pmar.roadtrip.user.person;
 
 import com.pmar.roadtrip.route.Route;
 import com.pmar.roadtrip.user.User;
-import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import java.util.ArrayList;
+import lombok.Data;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-@Entity
-@Table(name="PERSON_TBL")
-public class Person implements User {
+import java.util.ArrayList;
+import java.util.List;
+
+
+@Document(collection="user")
+public class Person implements User{
 
     @Id
-    @SequenceGenerator(
-            name = "person_sequence",
-            sequenceName = "person_sequence",
-            initialValue=200,
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "person_sequence"
-    )
-    @Column(
-            name = "id",
-            updatable = false
-    )
-    private Long id;
+    private ObjectId id;
 
-    @Column(
-            name = "account_id",
-            nullable = false,
-            updatable = false
-    )
-    private Long accountId;
-
-    @Column(
-            name = "first_name",
-            nullable = false
-    )
     private String firstName;
 
-    @Column(
-            name = "last_name",
-            nullable = false
-    )
     private String lastName;
 
-    @Column(
-            name = "username",
-            nullable = false
-    )
     private String username;
 
-    @Column(
-            name = "email",
-            nullable = false
-    )
     private String email;
 
+    private List<Route> routes;
 
     public Person(){}
-    public Person(Long accountId, String firstName, String lastName, String username,String email){
-        this.accountId = accountId;
+    public Person(String firstName, String lastName, String username,String email){
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.email = email;
+        this.routes=new ArrayList<Route>();
     }
-
-
-
-    public String getUsername() {return username;}
-
-    public String getFirstName() {return firstName;}
-
-    public String getLastName() {return lastName;}
-
-    public String getEmail() {return email;}
-
-    public Long getAccountId(){return accountId;}
-
-    public Long getId(){return id;}
-
-    public void setUsername(String newUsername) {username = newUsername;}
-
-    public void setFirstName(String newFirstName) {firstName = newFirstName;}
-
-    public void setLastName(String newLastName) {lastName = newLastName;}
 
 
     @Override
     public String toString(){
         return String.format("Person[ID: %d, Name: %s %s, Username: %s, Email: %s]",id,firstName,lastName,username,email);
+    }
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public List<Route> getRoutes(){
+        return routes;
+    }
+
+    public void setFirstName(String newName) {
+        firstName = newName;
+    }
+
+    public void setLastName(String newLastName) {
+        lastName = newLastName;
+    }
+
+    public void setUsername(String newUsername) {
+        username = newUsername;
+    }
+
+    public void setRoute(Route newRoute){
+        routes.add(newRoute);
     }
 }

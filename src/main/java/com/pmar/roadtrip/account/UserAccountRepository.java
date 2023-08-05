@@ -1,10 +1,13 @@
 package com.pmar.roadtrip.account;
 
 
-import org.springframework.data.jpa.repository.JpaRepository;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserAccountRepository extends JpaRepository<UserAccount,Long> {
+public interface UserAccountRepository extends MongoRepository<UserAccount, ObjectId>{
+
 
 }

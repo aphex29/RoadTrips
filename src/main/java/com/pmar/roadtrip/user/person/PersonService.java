@@ -1,27 +1,33 @@
 package com.pmar.roadtrip.user.person;
 import com.pmar.roadtrip.route.Route;
 import com.pmar.roadtrip.route.RouteService;
-import jakarta.persistence.EntityNotFoundException;
+
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PersonService {
-
     @Autowired
-    private PersonRepository repository;
+    PersonRepository repo;
 
-    public Person createPerson(Long accountId,String firstName, String lastName, String username, String email){
-        Person person = new Person(accountId, firstName, lastName,username,email);
-        return repository.save(person);
+    public List<Person> getAll(){
+        return repo.findAll();
     }
 
-    public Person getPerson(Long accountId){
-        return repository.findByAccountId(accountId)
-                .orElseThrow(()-> new EntityNotFoundException("Account ID: "+ accountId + " not found"));
+    public Person getById(String id){
+        ObjectId oId = new ObjectId(id);
+        return repo.findById(oId).orElseThrow(
+                ()-> new IllegalArgumentException("ID: " + id + " does not exist"));
     }
 
+//    public Route getRoutes(String id){
+//        ObjectId oId = new ObjectId(id);
+//
+//    }
 
 }
