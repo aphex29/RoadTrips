@@ -26,6 +26,7 @@ public class Person implements User{
 
     private String email;
 
+    @DocumentReference
     private List<Route> routes;
 
     public Person(){}
@@ -40,7 +41,7 @@ public class Person implements User{
 
     @Override
     public String toString(){
-        return String.format("Person[ID: %d, Name: %s %s, Username: %s, Email: %s]",id,firstName,lastName,username,email);
+        return String.format("Person[ID: %s, Name: %s %s, Username: %s, Email: %s]",id.toString(),firstName,lastName,username,email);
     }
 
     public ObjectId getId() {
