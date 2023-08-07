@@ -8,16 +8,22 @@ import com.google.maps.model.LatLng;
 import com.pmar.roadtrip.request.DirectionsRequest;
 import com.pmar.roadtrip.request.GeoContextBuilder;
 
+import com.pmar.roadtrip.search.RepoSearch;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.pmar.roadtrip.request.GeoContextBuilder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +34,22 @@ public class RouteService {
     @Value("${env.API_KEY}")
     private String apiKey;
 
+    @Autowired
+    RouteRepository repo;
+    @Autowired
+    RepoSearch srepo;
 
+    public List<Route> getRoutes(String id){
+        List<ObjectId> routesId = srepo.findRoutesIdByUserId(new ObjectId(id));
+        List<Route> ret = new ArrayList<>();
+        for (ObjectId routeId: routesId){
+            Route route = repo.findById(routeId).
+                    orElseThrow(()-> new IllegalArgumentException("User ID: " + id + " does not exist"));
+            ret.add(route);
+        }
 
+        return ret;
+    }
 	//TODO Find how to store a routes waypoints, if exists
 //    public Map<String,String> requestRoute(Long userId,String origin, String destination) {
 //
