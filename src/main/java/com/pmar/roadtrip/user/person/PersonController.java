@@ -1,5 +1,7 @@
 package com.pmar.roadtrip.user.person;
 
+import com.pmar.roadtrip.route.Route;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +25,9 @@ public class PersonController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Person> getById(@PathVariable String id){
+    public ResponseEntity<Person> getById(@PathVariable("id") String id){
         return new ResponseEntity<Person>(service.getById(id),HttpStatus.OK);
     }
-
 
 
 }
