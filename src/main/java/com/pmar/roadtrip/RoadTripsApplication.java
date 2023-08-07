@@ -7,6 +7,8 @@ import com.pmar.roadtrip.account.UserAccountRepository;
 import com.pmar.roadtrip.route.Route;
 import com.pmar.roadtrip.route.RouteRepository;
 import com.pmar.roadtrip.route.RouteService;
+import com.pmar.roadtrip.search.RepoSearch;
+import com.pmar.roadtrip.search.RepoSearchImpl;
 import com.pmar.roadtrip.user.person.Person;
 import com.pmar.roadtrip.user.person.PersonRepository;
 import com.pmar.roadtrip.user.person.PersonService;
@@ -22,6 +24,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,11 +56,12 @@ public class RoadTripsApplication {
 	}
 
 
+
 	@Bean
-	CommandLineRunner commandLineRunner(PersonRepository personRepository,PersonService personService,RouteRepository routeRepository){
+	CommandLineRunner commandLineRunner(PersonRepository personRepository, PersonService personService, RouteRepository routeRepository, RepoSearch repoSearch, RouteService routeService){
 		return args -> {
-			personRepository.deleteAll();
-			routeRepository.deleteAll();
+//			personRepository.deleteAll();
+//			routeRepository.deleteAll();
 
 			Person p1 = new Person("pat","mar","aphex","email@emai.com");
 			Person p2 = new Person("random","random2","random3","random4");
@@ -74,6 +78,9 @@ public class RoadTripsApplication {
 			p1.setRoute(r2p1);
 
 			personRepository.save(p1);
+
+//			System.out.println(routeService.getRoutes("64cdbbce13906a3f60722c4e"));
+
 
 		};
 	}
