@@ -52,71 +52,38 @@ public class Route {
         return String.format("Route[Route ID: %s, Origin: %s, Destination: %s, Distance: %.2fmi, Total Time: %dh%dm]",id.toString(),origin,destination,miles,hours,minutes);
     }
 
-    public ObjectId getId() {
-        return id;
-    }
+    public ObjectId getId() {return id;}
 
-    public String getOrigin() {
-        return origin;
-    }
+    public String getOrigin() {return origin;}
 
-    public String getDestination() {
-        return destination;
-    }
+    public String getDestination() {return destination;}
 
-    public double getStartLat() {
-        return startLat;
-    }
+    public double getStartLat() {return startLat;}
 
-    public double getStartLng() {
-        return startLng;
-    }
+    public double getStartLng() {return startLng;}
 
-    public double getEndLat() {
-        return endLat;
-    }
+    public double getEndLat() {return endLat;}
 
-    public double getEndLng() {
-        return endLng;
-    }
+    public double getEndLng() {return endLng;}
 
-    public double getDistance() {
-        return distance;
-    }
+    public double getDistance() {return distance;}
 
-    public Long getDuration() {
-        return duration;
-    }
+    public Long getDuration() {return duration;}
 
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
+    public void setOrigin(String origin) {this.origin = origin;}
 
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
+    public void setDestination(String destination) {this.destination = destination;}
 
-    public void setStartLat(double startLat) {
-        this.startLat = startLat;
-    }
+    public void setStartLat(double startLat) {this.startLat = startLat;}
 
-    public void setStartLng(double startLng) {
-        this.startLng = startLng;
-    }
+    public void setStartLng(double startLng) {this.startLng = startLng;}
 
-    public void setEndLat(double endLat) {
-        this.endLat = endLat;
-    }
+    public void setEndLat(double endLat) {this.endLat = endLat;}
 
-    public void setEndLng(double endLng) {
-        this.endLng = endLng;
-    }
+    public void setEndLng(double endLng) {this.endLng = endLng;}
 
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
+    public void setDistance(double distance) {this.distance = distance;}
 
-    public void setDuration(Long duration) {
-        this.duration = duration;
-    }
+    public void setDuration(Long duration) {this.duration = duration;}
+
 }
