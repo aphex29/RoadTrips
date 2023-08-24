@@ -5,13 +5,13 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.TravelMode;
 
-public class DirectionsRequest implements ExecuteDirectionRequest<DirectionsResult> {
+public class DirectionsRequestImpl implements DirectionsRequest<DirectionsResult> {
     private GeoApiContext context;
     private String origin;
     private String destination;
 
-    public DirectionsRequest(){}
-    public DirectionsRequest(GeoApiContext context, String origin, String destination){
+    public DirectionsRequestImpl(){}
+    public DirectionsRequestImpl(GeoApiContext context, String origin, String destination){
         this.context = context;
         this.origin = origin;
         this.destination = destination;
