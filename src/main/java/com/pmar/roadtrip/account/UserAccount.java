@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,19 +15,16 @@ public class UserAccount {
 
     @Id
     private ObjectId id;
-
-    private String username;
-
+    private ObjectId userId;
     private String password;
 
-    private String email;
 
 
-    public UserAccount(ObjectId id, String username, String password, String email){
+    public UserAccount(ObjectId id, ObjectId userId, String password){
         this.id=id;
-        this.username=username;
+        this.userId = userId;
         this.password=password;
-        this.email = email;
     }
+
 
 }
