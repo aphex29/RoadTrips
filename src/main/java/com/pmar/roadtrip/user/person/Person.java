@@ -24,16 +24,19 @@ public class Person implements User{
 
     private String username;
 
+    private String password;
+
     private String email;
 
     @DocumentReference
     private List<Route> routes;
 
     public Person(){}
-    public Person(String firstName, String lastName, String username,String email){
+    public Person(String firstName, String lastName, String username, String password, String email){
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
+        this.password = password;
         this.email = email;
         this.routes=new ArrayList<Route>();
     }
