@@ -60,11 +60,11 @@ public class RoadTripsApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(PersonRepository personRepository, PersonService personService, RouteRepository routeRepository, RepoSearch repoSearch, RouteService routeService){
 		return args -> {
-//			personRepository.deleteAll();
-//			routeRepository.deleteAll();
-
-			Person p1 = new Person("pat","mar","aphex","email@emai.com");
-			Person p2 = new Person("random","random2","random3","random4");
+			personRepository.deleteAll();
+			routeRepository.deleteAll();
+//
+			Person p1 = new Person("pat","mar","aphex","123","email@emai.com");
+			Person p2 = new Person("random","random2","random3", "345","random4@email.com");
 			personRepository.save(p1);
 			personRepository.save(p2);
 
@@ -76,10 +76,31 @@ public class RoadTripsApplication {
 
 			p1.setRoute(r1p1);
 			p1.setRoute(r2p1);
-
-			personRepository.save(p1);
-
-//			System.out.println(routeService.getRoutes("64cdbbce13906a3f60722c4e"));
+//
+//			Person p3 = new Person("123","rando2354m2","rand346om3","rando678567m4");
+//			personRepository.save(p3);
+//
+//			Route r3p1 = new Route("chicago","springfield",12.50,6700L,25.76,-30.56,-60.756,-50.00);
+//
+//
+//
+//
+//			personRepository.save(p1);
+//
+////			System.out.println(routeService.getRoutes("64cdbbce13906a3f60722c4e"));
+//
+//			Person p4 = new Person("patrick","markowski","profoxlong","email@email.com");
+//
+//			personRepository.save(p4);
+//
+//			Route r2 = new Route("chicago","springfield",12.50,6700L,25.76,-30.56,-60.756,-50.00);
+//			Route r3 = new Route("san francisco","washington",12.50,6700L,25.76,-30.56,-60.756,-50.00);
+//
+//			routeRepository.save(r2);
+//			routeRepository.save(r3);
+//
+//			routeService.test(r2,new ObjectId("64d2ade14cb86741dc6d3528"));
+//			routeService.test(r3,new ObjectId("64d2ade14cb86741dc6d3528"));
 
 
 		};
