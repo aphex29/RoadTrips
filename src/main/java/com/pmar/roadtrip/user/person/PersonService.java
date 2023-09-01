@@ -67,6 +67,15 @@ public class PersonService {
         return repo.findByUsername(username);
     }
 
+    public Person getByEmail(String email){
+        return repo.findByEmail(email);
+    }
+
+    public Person getByUsernameAndPassword(String username, String password){
+        return repo.findByUsernameAndPassword(username,password).orElseThrow(
+                ()->new IllegalArgumentException("Incorrect credentials"));
+    }
+
     public void deleteUser(ObjectId userId){
         repo.deleteById(userId);
     }
