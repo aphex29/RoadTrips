@@ -21,9 +21,8 @@ public class AuthService {
     }
 
     public Boolean verifyNewAccount(String username, String email){
-        User user1 = personService.getByUsername(username);
-        User user2 = personService.getByEmail(email);
-        if (user1==null && user2==null) return true;
-        else return false;
+        User u1 = personService.getByUsername(username);
+        User u2 = personService.getByEmail(email);
+        return (u1==null && u2==null);
     }
 }

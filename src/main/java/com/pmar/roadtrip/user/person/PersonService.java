@@ -64,11 +64,11 @@ public class PersonService {
     }
 
     public Person getByUsername(String username){
-        return repo.findByUsername(username);
+        return repo.findByUsername(username).orElse(null);
     }
 
     public Person getByEmail(String email){
-        return repo.findByEmail(email);
+        return repo.findByEmail(email).orElse(null);
     }
 
     public Person getByUsernameAndPassword(String username, String password){
