@@ -71,6 +71,10 @@ public class PersonService {
         return repo.findByEmail(email).orElse(null);
     }
 
+    public Person getById(String id){
+        return repo.findById(new ObjectId(id)).orElseThrow(() -> new IllegalArgumentException("ID: " + id + " does not exist"));
+    }
+
     public Person getByUsernameAndPassword(String username, String password){
         return repo.findByUsernameAndPassword(username,password).orElseThrow(
                 ()->new IllegalArgumentException("Incorrect credentials"));

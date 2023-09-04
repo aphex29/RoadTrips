@@ -38,9 +38,9 @@ public class PersonController {
         return new ResponseEntity<Person>(service.createPerson(firstName,lastName,username,password,email),HttpStatus.CREATED);
     }
 
-    @GetMapping("/users/{username}")
-    public ResponseEntity<Person> getByUsername(@PathVariable("username") String username){
-        return new ResponseEntity<Person>(service.getByUsername(username),HttpStatus.OK);
+    @GetMapping("/users/{id}")
+    public ResponseEntity<Person> getById(@PathVariable("id") String id){
+        return new ResponseEntity<Person>(service.getById(id),HttpStatus.OK);
     }
 
     @PostMapping("/update/firstName")
