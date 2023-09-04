@@ -38,9 +38,9 @@ public class RouteController {
         return new ResponseEntity<Route>(service.createRoute(userId,origin,destination),HttpStatus.OK);
     }
 
-    @DeleteMapping("/route/delete/{id}")
-    public ResponseEntity<Void> deleteRoute(@PathVariable String id){
-        service.deleteRoute(new ObjectId(id));
+    @PostMapping("/route/delete")
+    public ResponseEntity<Void> deleteRoute(@RequestBody Map<String,String> json){
+        service.deleteRoute(new ObjectId(json.get("routeId")), json.get("userId"));
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 

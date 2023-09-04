@@ -8,6 +8,8 @@ import com.pmar.roadtrip.request.GeoContextBuilder;
 
 import com.pmar.roadtrip.search.RepoSearch;
 import com.pmar.roadtrip.user.person.Person;
+import com.pmar.roadtrip.user.person.PersonRepository;
+import com.pmar.roadtrip.user.person.PersonService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,13 +27,14 @@ public class RouteService {
 
     @Value("${env.API_KEY}")
     private String apikey;
-
     @Autowired
     RouteRepository repo;
-
     @Autowired
     RepoSearch srepo;
-
+    @Autowired
+    PersonService pService;
+    @Autowired
+    PersonRepository pRepo;
     @Autowired
     MongoTemplate mongoTemplate;
 
@@ -85,8 +88,11 @@ public class RouteService {
     }
 
 
-    public void deleteRoute(ObjectId routeId){
+    public void deleteRoute(ObjectId routeId, String userId){
         repo.deleteById(routeId);
+        Person p = pService.getById(userId);
+        pRepo.save(p);
+
     }
 
 
