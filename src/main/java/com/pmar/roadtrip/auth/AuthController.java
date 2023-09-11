@@ -17,8 +17,7 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    @Autowired private AuthService authService;
 
     @PostMapping("/verify")
     public User verifyUser(@RequestBody Map<String,String> json){

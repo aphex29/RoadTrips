@@ -10,11 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
-    @Autowired
-    private PersonRepository repository;
+    @Autowired private PersonRepository repository;
 
-    @Autowired
-    private PersonService personService;
+    @Autowired private PersonService personService;
 
     public Person verifyUser(String username, String password){
         return personService.getByUsernameAndPassword(username,password);
