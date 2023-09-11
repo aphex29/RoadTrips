@@ -2,11 +2,10 @@ package com.pmar.roadtrip.user.person;
 
 import com.pmar.roadtrip.route.Route;
 import com.pmar.roadtrip.user.User;
-import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,6 @@ public class Person implements User{
 
     private String email;
 
-    @DocumentReference
     private List<Route> routes;
 
     public Person(){}

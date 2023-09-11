@@ -16,11 +16,9 @@ import java.util.List;
 
 @Service
 public class PersonService {
-    @Autowired
-    PersonRepository repo;
+    @Autowired PersonRepository repo;
 
-    @Autowired
-    MongoTemplate mongoTemplate;
+    @Autowired MongoTemplate mongoTemplate;
 
     public Person createPerson(String firstName, String lastName, String username, String password, String email){
         Person person = new Person(firstName,lastName,username, password, email);

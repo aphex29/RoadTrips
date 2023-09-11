@@ -9,12 +9,14 @@ public class DirectionsRequestImpl implements DirectionsRequest<DirectionsResult
     private GeoApiContext context;
     private String origin;
     private String destination;
+    private String[] waypoints;
 
     public DirectionsRequestImpl(){}
-    public DirectionsRequestImpl(GeoApiContext context, String origin, String destination){
+    public DirectionsRequestImpl(GeoApiContext context, String origin, String destination, String... waypoints){
         this.context = context;
         this.origin = origin;
         this.destination = destination;
+        this.waypoints = waypoints;
     }
 
 
@@ -25,6 +27,7 @@ public class DirectionsRequestImpl implements DirectionsRequest<DirectionsResult
                     .newRequest(context)
                     .mode(TravelMode.DRIVING)
                     .origin(origin)
+                    .waypoints(waypoints)
                     .destination(destination)
                     .await();
             return result;
@@ -34,7 +37,7 @@ public class DirectionsRequestImpl implements DirectionsRequest<DirectionsResult
         }
     }
 
-    public DirectionsResult requestWaypoints(String... waypoints){
+    public DirectionsResult requestWaypointRoute(String waypoints){
         try{
             DirectionsResult result = DirectionsApi
                     .newRequest(context)

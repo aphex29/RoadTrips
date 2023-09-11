@@ -16,10 +16,7 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class PersonController {
 
-    @Autowired
-    PersonService service;
-
-
+    @Autowired PersonService service;
 
     @GetMapping("/users")
     public ResponseEntity<List<Person>> getAll(){
