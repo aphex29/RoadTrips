@@ -1,7 +1,9 @@
 package com.pmar.roadtrip.request;
 
-public interface DirectionsRequest<T> {
+import com.google.maps.model.DirectionsResult;
 
-    T request();
+public interface DirectionsRequest {
+
+    DirectionsResult request();
 
 }

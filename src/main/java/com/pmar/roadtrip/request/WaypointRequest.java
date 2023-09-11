@@ -1,27 +1,23 @@
 package com.pmar.roadtrip.request;
 
 import com.google.maps.DirectionsApi;
-import com.google.maps.GaeRequestHandler;
 import com.google.maps.GeoApiContext;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.TravelMode;
 
-public class NoWaypointRequest implements DirectionsRequest {
+public class WaypointRequest implements DirectionsRequest{
+
     private GeoApiContext context;
     private String origin;
     private String destination;
+    private String[] waypoints;
 
-
-    public NoWaypointRequest(){}
-    public NoWaypointRequest(GeoApiContext context, String origin, String destination){
+    public WaypointRequest(GeoApiContext context, String origin, String destination, String... waypoints){
         this.context = context;
         this.origin = origin;
         this.destination = destination;
-
+        this.waypoints = waypoints;
     }
-
-
-
     public DirectionsResult request() {
         try{
 
@@ -29,6 +25,7 @@ public class NoWaypointRequest implements DirectionsRequest {
                     .newRequest(context)
                     .mode(TravelMode.DRIVING)
                     .origin(origin)
+                    .waypoints(waypoints)
                     .destination(destination)
                     .await();
             return result;
@@ -37,7 +34,4 @@ public class NoWaypointRequest implements DirectionsRequest {
             throw new IllegalArgumentException(e);
         }
     }
-
-
-
 }
