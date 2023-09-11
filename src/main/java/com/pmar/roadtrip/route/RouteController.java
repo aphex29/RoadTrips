@@ -1,5 +1,11 @@
 package com.pmar.roadtrip.route;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pmar.roadtrip.FormatData.RequestObject;
+import com.pmar.roadtrip.FormatData.StringToRequestObject;
+import com.pmar.roadtrip.waypoint.Waypoint;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +23,7 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class RouteController {
 
-    @Autowired
-    RouteService service;
+    @Autowired RouteService service;
 
     @GetMapping("/routes/{userId}")
     public ResponseEntity<List<Route>> getRoutes(@PathVariable String userId){
@@ -31,11 +38,16 @@ public class RouteController {
     }
 
     @PostMapping("/route")
-    public ResponseEntity<Route> createRoute(@RequestBody Map<String,String> json){
-        ObjectId userId = new ObjectId(json.get("userId"));
-        String origin = json.get("origin");
-        String destination = json.get("destination");
-        return new ResponseEntity<Route>(service.createRoute(userId,origin,destination),HttpStatus.OK);
+    public ResponseEntity<Route> createRoute(@RequestBody String json){
+        RequestObject obj = StringToRequestObject.mapToObject(json);
+        return new ResponseEntity<Route>(service.createRoute(
+                obj.getUserId(),
+                obj.getOrigin(),
+                obj.getDestination(),
+                obj.getWaypoints()
+        ),HttpStatus.OK);
+
+
     }
 
     @PostMapping("/route/delete")
