@@ -59,6 +59,8 @@ public class RouteService {
         }
         result = dRequest.request();
 
+        Person person = pRepo.findById(userId).orElseThrow(()->new IllegalArgumentException("UserID " + userId + " does not exist"));
+
         String polyline = result.routes[0].overviewPolyline.getEncodedPath();
         Route route = repo.save(new Route(polyline));
         mongoTemplate.update(Person.class)
@@ -71,7 +73,10 @@ public class RouteService {
         List<Waypoint> list= waypointService.createWaypoints(legs,route.getId());
 
         for (Waypoint waypoint:list) route.setWaypoints(waypoint);
-        return repo.save(route);
+        person.setRoute(route);
+        repo.save(route);
+        pRepo.save(person);
+        return route;
     }
 
 
@@ -87,15 +92,23 @@ public class RouteService {
     }
 
     public Route getRoute(ObjectId routeId){
-        return repo.findById(routeId).orElseThrow(() -> new IllegalArgumentException("Route ID: " + routeId.toString() + " does not exist"));
+        return repo.findById(routeId).orElseThrow(() -> new IllegalArgumentException("Route ID: " + routeId + " does not exist"));
     }
 
 
     public void deleteRoute(ObjectId routeId, String userId){
+        //Get user and delete users route by id from their route list
+        Person person = pRepo.findById(new ObjectId(userId)).orElseThrow(() -> new IllegalArgumentException("User ID: " + userId + " does not exist"));
+        person.getRoutes().removeIf(route -> route.getId().equals(routeId));
+
+        //Get route and delete all waypoints associated with that route from database
+        Route route = repo.findById(routeId).orElseThrow(() -> new IllegalArgumentException("Route ID: " + routeId + " does not exist"));
+        List<Waypoint> waypoints = route.getWaypoints();
+        for (Waypoint waypoint:waypoints){
+            waypointService.deleteWaypoint(waypoint.getId().toString());
+        }
         repo.deleteById(routeId);
-        //TODO delete all waypoints by routeId
-        Person p = pService.getById(userId);
-        pRepo.save(p);
+        pRepo.save(person);
     }
 
 
