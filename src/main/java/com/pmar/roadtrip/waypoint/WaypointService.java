@@ -35,11 +35,8 @@ public class WaypointService {
 
 
     public List<Waypoint> createWaypoints(DirectionsLeg[] legs, ObjectId rId) {
-
         List<Waypoint> ret = new ArrayList<>();
-
         for (int i = 0;i<legs.length;i++){
-
             //To add origin into waypoints, where the origin is the only waypoint where "start" will be called
             if (i==0){
                 String oAddress = legs[i].startAddress;
@@ -48,10 +45,7 @@ public class WaypointService {
                 Long oDistance = 0L;
                 Long oDuration = 0L;
                 Waypoint oWaypoint = wpRepository.save(new Waypoint(oAddress,oLng,oLat,oDistance,oDuration));
-                mongoTemplate.update(Route.class)
-                        .matching(Criteria.where("_id").is(rId))
-                        .apply(new Update().push("waypoints").value(oWaypoint))
-                        .first();
+                updateMongoDB(rId, oWaypoint);
                 ret.add(oWaypoint);
             }
 
@@ -61,11 +55,7 @@ public class WaypointService {
             Long distance = legs[i].distance.inMeters;
             Long duration = legs[i].duration.inSeconds;
             Waypoint waypoint = wpRepository.save(new Waypoint(address,lng,lat,distance,duration));
-
-            mongoTemplate.update(Route.class)
-                    .matching(Criteria.where("_id").is(rId))
-                    .apply(new Update().push("waypoints").value(waypoint))
-                    .first();
+            updateMongoDB(rId, waypoint);
             ret.add(waypoint);
         }
 
@@ -73,14 +63,31 @@ public class WaypointService {
 
     }
 
+    public void updateMongoDB(ObjectId rId, Waypoint waypoint){
+        mongoTemplate.update(Route.class)
+                .matching(Criteria.where("_id").is(rId))
+                .apply(new Update().push("waypoints").value(waypoint))
+                .first();
+    }
+
+    public Waypoint getWaypoint(String id){
+        return wpRepository.findById(new ObjectId(id)).orElseThrow(()-> new IllegalArgumentException("Waypoint id " + id + " not found"));
+    }
+
+    public Waypoint editNote(String id, String note){
+        Waypoint waypoint = wpRepository.findById(new ObjectId(id)).orElseThrow(()-> new IllegalArgumentException("Waypoint id " + id + " not found"));
+        waypoint.setNotes(note);
+        return wpRepository.save(waypoint);
+    }
+
+    public String getNote(String id){
+        Waypoint waypoint = wpRepository.findById(new ObjectId(id)).orElseThrow(()-> new IllegalArgumentException("Waypoint id " + id + " not found"));
+        return waypoint.getNotes();
+    }
 
 
-    public void deleteWaypoint(String userId, String waypointId){
+    public void deleteWaypoint(String waypointId){
         wpRepository.deleteById(new ObjectId(waypointId));
-        Person p = pService.getById(userId);
-        pRepository.save(p);
-        //TODO
-        //regenerateRoute (String... waypoints)
     }
 
 }
