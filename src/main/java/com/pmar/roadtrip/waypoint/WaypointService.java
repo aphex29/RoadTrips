@@ -34,21 +34,27 @@ public class WaypointService {
     MongoTemplate mongoTemplate;
 
 
+    /*
+    Each route, with or without waypoints, has an origin and a destination.
+    The first waypoint (aka origin) does not store a distance or duration because
+    that's where the user starts their trip. Each waypoint gets the origin added
+    to the list where distance and duration are 0. Then the for loop goes through
+    each leg and saves the i-1 -> i information at i
+     */
+
     public List<Waypoint> createWaypoints(DirectionsLeg[] legs, ObjectId rId) {
         List<Waypoint> ret = new ArrayList<>();
-        for (int i = 0;i<legs.length;i++){
-            //To add origin into waypoints, where the origin is the only waypoint where "start" will be called
-            if (i==0){
-                String oAddress = legs[i].startAddress;
-                double oLng = legs[i].startLocation.lng;
-                double oLat = legs[i].startLocation.lat;
-                Long oDistance = 0L;
-                Long oDuration = 0L;
-                Waypoint oWaypoint = wpRepository.save(new Waypoint(oAddress,oLng,oLat,oDistance,oDuration));
-                updateMongoDB(rId, oWaypoint);
-                ret.add(oWaypoint);
-            }
 
+        String oAddress = legs[0].startAddress;
+        double oLng = legs[0].startLocation.lng;
+        double oLat = legs[0].startLocation.lat;
+        Long oDistance = 0L;
+        Long oDuration = 0L;
+        Waypoint oWaypoint = wpRepository.save(new Waypoint(oAddress,oLng,oLat,oDistance,oDuration));
+        updateMongoDB(rId, oWaypoint);
+        ret.add(oWaypoint);
+
+        for (int i = 1;i<legs.length;i++){
             String address = legs[i].endAddress;
             double lng = legs[i].endLocation.lng;
             double lat = legs[i].endLocation.lat;

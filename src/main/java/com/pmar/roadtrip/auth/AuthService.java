@@ -18,6 +18,10 @@ public class AuthService {
         return personService.getByUsernameAndPassword(username,password);
     }
 
+    /*
+    Checks if username and email are both not in the database.
+    If user!=null, one of those entries exist
+     */
     public Boolean verifyNewAccount(String username, String email){
         User u1 = personService.getByUsername(username);
         User u2 = personService.getByEmail(email);

@@ -45,6 +45,12 @@ public class RouteService {
         return builder.apiKey(key).build();
     }
 
+    /*
+    Creates route (w or w/o waypoints) by first calling the Google API Library,
+    creates new Route object with polyline returned from Google, saves route into
+    database, updates List<Route> in Person database template, creates waypoint objects
+    and stores them in List<Waypoints> in Route database template, updates Person object
+     */
 
     public Route createRoute(ObjectId userId, String origin, String destination, String... waypoints){
         GeoApiContext context = RouteService.createContext(apikey);
@@ -79,6 +85,9 @@ public class RouteService {
         return route;
     }
 
+    public List<Route> getAll(){
+        return repo.findAll();
+    }
 
     public List<Route> getRoutes(ObjectId userId){
         List<ObjectId> routesId = srepo.findRoutesIdByUserId(userId);
@@ -95,6 +104,9 @@ public class RouteService {
         return repo.findById(routeId).orElseThrow(() -> new IllegalArgumentException("Route ID: " + routeId + " does not exist"));
     }
 
+    /*
+    Deletes route as well as each waypoint from the corresponding database
+     */
 
     public void deleteRoute(ObjectId routeId, String userId){
         //Get user and delete users route by id from their route list

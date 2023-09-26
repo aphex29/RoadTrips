@@ -1,6 +1,5 @@
 package com.pmar.roadtrip.search;
 
-import com.google.common.collect.Lists;
 import com.mongodb.client.*;
 import com.pmar.roadtrip.route.Route;
 import com.pmar.roadtrip.user.person.Person;
@@ -17,10 +16,7 @@ import org.bson.types.ObjectId;
 @Component
 public class RepoSearchImpl implements RepoSearch{
 
-    @Autowired
-    MongoClient client;
-
-
+    @Autowired MongoClient client;
 
     @Override
     public List<ObjectId> findRoutesIdByUserId(ObjectId uid) {
